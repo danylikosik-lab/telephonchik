@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 import cors from "cors";
 import { Server as SocketIOServer } from "socket.io";
@@ -23,11 +24,15 @@ app.get("/health", (_req, res) => {
 
 // Раздача собранного фронта (для Railway и продакшена)
 const clientDist = path.resolve(__dirname, "../../client/dist");
-app.use(express.static(clientDist));
-app.get("*", (req, res, next) => {
-  if (req.path.startsWith("/socket.io")) return next();
-  res.sendFile(path.join(clientDist, "index.html"));
-});
+if (fs.existsSync(clientDist)) {
+  app.use(express.static(clientDist));
+  app.get("*", (req, res, next) => {
+    if (req.path.startsWith("/socket.io")) return next();
+    res.sendFile(path.join(clientDist, "index.html"));
+  });
+} else {
+  console.warn("[server] client/dist не найден, фронт не раздаётся:", clientDist);
+}
 
 const httpServer = http.createServer(app);
 
@@ -45,7 +50,7 @@ io.on("connection", (socket) => {
   registerGameHandlers(io, socket, roomManager);
 });
 
-httpServer.listen(PORT, () => {
-  console.log(`[server] Телефончик backend запущен на порту ${PORT}`);
+httpServer.listen(PORT, "0.0.0.0", () => {
+  console.log(`[server] Телефончик запущен на 0.0.0.0:${PORT}`);
 });
 
