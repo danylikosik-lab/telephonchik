@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "node --loader ts-node/esm --no-warnings src/index.ts",
-    "build": "npx tsc -p tsconfig.json",
+    "build": "node node_modules/typescript/bin/tsc.js -p tsconfig.json",
     "start": "node dist/index.js"
   },
   "dependencies": {
