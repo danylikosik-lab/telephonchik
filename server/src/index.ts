@@ -1,3 +1,4 @@
+console.log("[server] Starting...");
 import express from "express";
 import http from "http";
 import path from "path";
@@ -52,5 +53,8 @@ io.on("connection", (socket) => {
 
 httpServer.listen(PORT, "0.0.0.0", () => {
   console.log(`[server] Телефончик запущен на 0.0.0.0:${PORT}`);
+}).on("error", (err) => {
+  console.error("[server] Listen error:", err);
+  process.exit(1);
 });
 
