@@ -10,7 +10,6 @@ import type {
   MasterpieceSettings,
   MissingPieceSettings,
   ModeSettingsMap,
-  NormalSettings,
   ScoreSettings,
   SecretSettings,
   SandwichSettings,
